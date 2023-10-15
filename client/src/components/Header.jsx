@@ -18,7 +18,7 @@ const Header = () => {
             type="text"
             placeholder="Search..."
             // here w-24 sm:w-64 means for small screens width=24 and for big and above screens width=64
-            className="bg-transparent focus:outline-none w-24 sm:w-64"
+            className="bg-transparent focus:outline-none w-32 sm:w-64"
           />
 
           <FaSearch className="text-slate-600" />

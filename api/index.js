@@ -1,59 +1,38 @@
 import express from "express";
+import dotenv from "dotenv";
+import connectDB from "../config/db.js";
+import authRouter from "./routes/auth.route.js";
 
+//configure env
+dotenv.config();
+
+//database config->
+connectDB();
+
+//rest object
 const app = express();
 
-app.listen(3000, () => {
-    console.log("Server is running on port 3000")
+//middlewares
+app.use(express.json());
+
+//routes
+// app.use("/api/user", userRouter);
+app.use("/api/auth", authRouter);
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}...`);
 });
 
-/*
-import React from "react";
-import { FaSearch } from "react-icons/fa";
-import { Link } from "react-router-dom";
-
-const Header = () => {
-  return (
-    <div className="bg-slate-200 shadow-md">
-      <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
-        <Link to="/">
-          <h1 className="font-bold text-sm sm:text-xl flex flex-wrap">
-            <span className="text-slate-500">Dream</span>
-            <span className="text-slate-700">House</span>
-          </h1>
-        </Link>
-
-        <form className="bg-slate-100 p-3 rounded-lg flex items-center">
-          <input
-            type="text"
-            placeholder="Search..."
-            // here w-24 sm:w-64 means for small screens width=24 and for big and above screens width=64
-            className="bg-transparent focus:outline-none w-24 sm:w-64"
-          />
-
-          <FaSearch className="text-slate-600" />
-        </form>
-
-        <ul className="flex gap-4">
-          <Link to="/">
-            <li className="hidden sm:inline text-slate-700 hover:underline">
-              Home
-            </li>
-          </Link>
-
-          <Link to="/about">
-            <li className="hidden sm:inline text-slate-700 hover:underline">
-              About
-            </li>
-          </Link>
-
-          <Link to="/sign-in">
-          <li className="text-slate-700 hover:underline">Sign in</li>
-          </Link>
-        </ul>
-      </div>
-    </div>
-  );
-};
-
-export default Header;
-*/
+//Middleware for 500 error ->
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "Internal Server Error";
+  console.log(err);
+  return res.send(statusCode).json({
+    success: false,
+    statusCode,
+    message,
+  });
+});
