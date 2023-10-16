@@ -6,6 +6,7 @@ import Profile from "./pages/Profile";
 import Signin from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Header from "./components/Header";
+import PrivateRoute from "./components/PrivateRoute";
 
 const App = () => {
   return (
@@ -14,10 +15,15 @@ const App = () => {
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/profile" element={<Profile />} />
+
           <Route path="/sign-in" element={<Signin />} />
+
           <Route path="/sign-up" element={<SignUp />} />
+
+          <Route path="/about" element={<About />} />
+          <Route element={<PrivateRoute />}>
+            <Route path="/profile" element={<Profile />} />
+          </Route>
         </Routes>
       </Router>
     </div>
@@ -25,3 +31,4 @@ const App = () => {
 };
 
 export default App;
+//3:27:54

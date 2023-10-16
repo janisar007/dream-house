@@ -123,7 +123,7 @@ export const googleController = async (req, res, next) => {
         username: convertedUsername,
         email: req.body.email,
         password: hashedPassword,
-        avatar: req.body.photo,
+        avator: req.body.photo,
       });
 
       await newUser.save();

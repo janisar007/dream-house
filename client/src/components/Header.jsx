@@ -1,8 +1,10 @@
 import React from "react";
 import { FaSearch } from "react-icons/fa";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const Header = () => {
+  const { currentUser } = useSelector((state) => state.user);
   return (
     <div className="bg-slate-200 shadow-md">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
@@ -37,8 +39,17 @@ const Header = () => {
             </li>
           </Link>
 
-          <Link to="/sign-in">
-          <li className="text-slate-700 hover:underline">Sign in</li>
+          {/* here you could wander if it is directing to profile page what happend if i click sign in button. see PrivateRoute.jsx in which i protected the route so that if user is authenticated then the image will apear and clicking on it will direct to profile if not then to signin page.  */}
+          <Link to="/profile">
+            {currentUser ? (
+              <img
+                className="rounded-full h-7 w-7 object-cover"
+                src={currentUser.avator}
+                alt="profile"
+              />
+            ) : (
+              <li className="text-slate-700 hover:underline">Sign in</li>
+            )}
           </Link>
         </ul>
       </div>
