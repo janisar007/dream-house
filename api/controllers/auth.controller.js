@@ -60,7 +60,7 @@ export const signinController = async (req, res, next) => {
       });
     }
 
-    const validPassword = await comparePassword(password, validUser.password);
+    const validPassword = await comparePassword(password, validUser.password); 
     if (!validPassword) {
       // return next(errorHandler(401, "Invalid email and password!"));
       return res.status(401).send({
