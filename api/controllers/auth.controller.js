@@ -89,3 +89,64 @@ export const signinController = async (req, res, next) => {
     });
   }
 };
+
+//Post Google signin ->
+export const googleController = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+
+    if (user) {
+      const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
+
+      //excluding password from res->
+      const { password: pass, ...rest } = user._doc;
+
+      //access_token can be any thing and httpOnly is for scurity of cookie
+      res
+        .cookie("access_token", token, { httpOnly: true })
+        .status(200)
+        .json(rest);
+    } else {
+      //Other wise we have to create th user->
+      //Since password is required field and with google there is no password  from re.body so we have to create a dummy password->
+      const generatePassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8); //this is a 16 character password.
+      const hashedPassword = await hashPassword(generatePassword);
+
+      // Sinse username is like this Janisar Akhtar but we want like this janisarakhtar + some random number and string->
+      const convertedUsername =
+        req.body.name.split(" ").join("").toLowerCase() +
+        Math.random().toString(36).slice(-4);
+
+      const newUser = new User({
+        username: convertedUsername,
+        email: req.body.email,
+        password: hashedPassword,
+        avatar: req.body.photo,
+      });
+
+      await newUser.save();
+
+      const token = jwt.sign({ _id: newUser._id }, process.env.JWT_SECRET);
+
+      //excluding password from res->
+      const { password: pass, ...rest } = newUser._doc;
+
+      //access_token can be any thing and httpOnly is for scurity of cookie
+      res
+        .cookie("access_token", token, { httpOnly: true })
+        .status(200)
+        .json(rest);
+    }
+  } catch (error) {
+    // next(error);
+    console.log(error);
+
+    res.status(500).send({
+      success: false,
+      message: "Error in Google Login",
+      error: error,
+    });
+  }
+};
