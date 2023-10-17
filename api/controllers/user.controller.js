@@ -17,7 +17,6 @@ export const updateUserController = async (req, res, next) => {
       success: false,
       message: "You can only update your own account!",
     });
-
   }
 
   try {
@@ -43,6 +42,36 @@ export const updateUserController = async (req, res, next) => {
 
     res.status(200).json(rest);
   } catch (error) {
-     next(error);
+    // next(error);
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error in Updating user",
+      error: error,
+    });
+  }
+};
+
+export const deleteUserController = async (req, res, next) => {
+  if (req.user._id !== req.params.id) {
+    return res.status(401).send({
+      success: false,
+      message: "You can only delete your own account!",
+    });
+  }
+
+  try {
+    await User.findByIdAndDelete(req.params.id);
+
+    res.clearCookie('access_token');
+    res.status(200).json("User has been deleted!");
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error in deleting user",
+      error: error,
+    });
   }
 };

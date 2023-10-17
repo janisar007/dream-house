@@ -42,9 +42,25 @@ const userSlice = createSlice({
       state.error = action.payload;
       state.loading = false;
     },
+
+    //3.Reducers for deleting the user account ->
+    deleteUserStart: (state) => {
+      state.loading = true;
+    },
+
+    deleteUserSuccess: (state) => {
+      state.currentUser = null;
+      state.loading = false;
+      state.error = null;
+    },
+
+    deleteUserFailure: (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    },
   },
 });
 
-export const { signInStart, signInSuccess, signInFailure, updateUserStart, updateUserSuccess, updateUserFailure} = userSlice.actions; //donot know why action here.
+export const { signInStart, signInSuccess, signInFailure, updateUserStart, updateUserSuccess, updateUserFailure, deleteUserStart, deleteUserSuccess, deleteUserFailure} = userSlice.actions; //donot know why action here.
 
 export default userSlice.reducer; //now import and cofig this reducer in the sttore.
