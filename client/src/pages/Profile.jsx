@@ -11,6 +11,9 @@ import {
   deleteUserFailure,
   deleteUserStart,
   deleteUserSuccess,
+  signOutUserFailure,
+  signOutUserStart,
+  signOutUserSuccess,
   updateUserFailure,
   updateUserStart,
   updateUserSuccess,
@@ -121,14 +124,31 @@ const Profile = () => {
         return;
       }
 
-      dispatch(deleteUserSuccess(data))
-
-
-      
+      dispatch(deleteUserSuccess(data));
     } catch (error) {
-      dispatch(deleteUserFailure(error.message))
+      dispatch(deleteUserFailure(error.message));
     }
-  }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      dispatch(signOutUserStart());
+
+      const res = await fetch("/api/auth/signout"); //default method is GET
+
+      const data = await res.json();
+
+      if (data.success === false) {
+        dispatch(signOutUserFailure(data.message));
+        return;
+      }
+
+      dispatch(signOutUserSuccess(data));
+    } catch (error) {
+      console.log(error);
+      dispatch(signOutUserFailure(error.message));
+    }
+  };
 
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -199,11 +219,17 @@ const Profile = () => {
       </form>
 
       <div className="flex justify-between mt-5">
-        <span onClick={handleDeleteUser} className="text-red-700 cursor-pointer hover:text-red-900">
+        <span
+          onClick={handleDeleteUser}
+          className="text-red-700 cursor-pointer hover:text-red-900"
+        >
           Delete account
         </span>
 
-        <span className="text-red-700 cursor-pointer hover:text-red-900">
+        <span
+          onClick={handleSignOut}
+          className="text-red-700 cursor-pointer hover:text-red-900"
+        >
           Sign out
         </span>
       </div>

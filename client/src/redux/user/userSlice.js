@@ -10,7 +10,6 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-
     //1.Reducers for sign in ->
     signInStart: (state) => {
       state.loading = true;
@@ -58,9 +57,38 @@ const userSlice = createSlice({
       state.error = action.payload;
       state.loading = false;
     },
+
+    //3.Reducers for sign out ->
+    signOutUserStart: (state) => {
+      state.loading = true;
+    },
+
+    signOutUserSuccess: (state) => {
+      state.currentUser = null;
+      state.loading = false;
+      state.error = null;
+    },
+
+    signOutUserFailure: (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    },
   },
 });
 
-export const { signInStart, signInSuccess, signInFailure, updateUserStart, updateUserSuccess, updateUserFailure, deleteUserStart, deleteUserSuccess, deleteUserFailure} = userSlice.actions; //donot know why action here.
+export const {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+  updateUserStart,
+  updateUserSuccess,
+  updateUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserFailure,
+  signOutUserStart,
+  signOutUserSuccess,
+  signOutUserFailure,
+} = userSlice.actions; //donot know why action here.
 
-export default userSlice.reducer; //now import and cofig this reducer in the sttore.
+export default userSlice.reducer; //now import and cofig this reducer in the store.

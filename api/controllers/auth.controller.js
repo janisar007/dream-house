@@ -150,3 +150,23 @@ export const googleController = async (req, res, next) => {
     });
   }
 };
+
+export const signOutController = async (req, res, next) => {
+  try {
+    res.clearCookie("access_token");
+    // res.status(200).json("User has been logged out!");
+
+    res.status(200).send({
+      success: true,
+      message: "User has been logged out!",
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).send({
+      success: false,
+      message: "Error in sign out controller",
+      error: error,
+    });
+  }
+};
