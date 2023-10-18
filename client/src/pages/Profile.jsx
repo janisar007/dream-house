@@ -31,7 +31,7 @@ const Profile = () => {
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [showListingError, setShowListingError] = useState(false);
-  const [userListings, setSetUserListings] = useState([]);
+  const [userListings, setUserListings] = useState([]);
   const dispatch = useDispatch();
   // console.log(formData);
 
@@ -167,11 +167,31 @@ const Profile = () => {
         return;
       }
 
-      setSetUserListings(data);
+      setUserListings(data);
     } catch (error) {
       setShowListingError(true);
     }
   };
+
+  const handleListingDelete = async (listingId) => {
+    try {
+      const res = await fetch(`/api/listing/delete/${listingId}`, {
+        method: 'DELETE',
+      })
+
+      const data = await res.json();
+      if(data.success === false) {
+        console.log(data.message);
+        return;
+      }
+
+      setUserListings((prev) => prev.filter((listing) => listing._id !== listingId));
+      
+    } catch (error) {
+      console.log(error.message);
+    }
+
+  }
 
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -302,7 +322,7 @@ const Profile = () => {
                 <p>{listing.name}</p>
               </Link>
               <div className="flex flex-col items-center gap-3">
-                <button className="text-red-700 uppercase">
+                <button onClick={() => handleListingDelete(listing._id)} className="text-red-700 uppercase">
                   <MdDelete className="text-2xl w-6 h-6"/>
                 </button>
                 <button className="text-green-700 uppercase">
