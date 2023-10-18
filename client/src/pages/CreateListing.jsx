@@ -27,7 +27,7 @@ const CreateListing = () => {
     parking: false,
     furnished: false,
   });
-  console.log(formData);
+  // console.log(formData);
 
   const [imageUploadError, setImagesUploadError] = useState(false);
   const [imageUploadLoading, setImageUploadLoading] = useState(false);
