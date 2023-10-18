@@ -10,24 +10,23 @@ import {
 } from "firebase/storage";
 
 const UpdateListing = () => {
+  const params = useParams();
 
-    const params = useParams();
+  useEffect(() => {
+    const fetchListing = async () => {
+      const listingId = params.listingId;
+      const res = await fetch(`/api/listing/get/${listingId}`);
+      const data = await res.json();
 
-    useEffect(() => {
-        const fetchListing = async () => {
-            const listingId = params.listingId;
-            const res = await fetch(`/api/listing/get/${listingId}`);
-            const data = await res.json();
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+      setFormData(data);
+    };
 
-            if(data.success === false) {
-                console.log(data.message);
-                return;
-            }
-            setFormData(data);
-        }
-
-        fetchListing();
-    }, [])
+    fetchListing();
+  }, []);
 
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
@@ -184,7 +183,7 @@ const UpdateListing = () => {
         setFormSubmitError(data.message);
       }
 
-      //todo 
+      //todo
       navigate(`/listing/${data._id}`);
     } catch (error) {
       setFormSubmitError(error.message);
@@ -431,5 +430,3 @@ const UpdateListing = () => {
 };
 
 export default UpdateListing;
-
-
