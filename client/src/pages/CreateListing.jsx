@@ -165,7 +165,7 @@ const CreateListing = () => {
         setFormSubmitError(data.message);
       }
 
-      //todo 
+      //todo
       navigate(`/listing/${data._id}`);
     } catch (error) {
       setFormSubmitError(error.message);
@@ -317,7 +317,10 @@ const CreateListing = () => {
 
               <div className="flex flex-col items-center">
                 <p>Regular price</p>
-                <span className="text-xs">($ / month)</span>
+                {/* <span className="text-xs">($ / month)</span> */}
+                {formData.type === "rent" && (
+                  <span className="text-xs">($ / month)</span>
+                )}
               </div>
             </div>
 
@@ -335,7 +338,10 @@ const CreateListing = () => {
                 />
                 <div className="flex flex-col items-center">
                   <p>Discounted price</p>
-                  <span className="text-xs">($ / month)</span>
+                  {/* <span className="text-xs">($ / month)</span> */}
+                  {formData.type === "rent" && (
+                    <span className="text-xs">($ / month)</span>
+                  )}
                 </div>
               </div>
             )}
