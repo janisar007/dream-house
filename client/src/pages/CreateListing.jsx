@@ -164,6 +164,8 @@ const CreateListing = () => {
       if (data.success === false) {
         setFormSubmitError(data.message);
       }
+
+      //todo 
       navigate(`/listing/${data._id}`);
     } catch (error) {
       setFormSubmitError(error.message);

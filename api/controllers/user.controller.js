@@ -1,3 +1,4 @@
+import Listing from "../models/listing.model.js";
 import User from "../models/user.model.js";
 import { hashPassword } from "../utils/auth.util.js";
 import { errorHandler } from "../utils/error.util.js";
@@ -63,14 +64,38 @@ export const deleteUserController = async (req, res, next) => {
   try {
     await User.findByIdAndDelete(req.params.id);
 
-    res.clearCookie('access_token');
+    res.clearCookie("access_token");
     res.status(200).json("User has been deleted!");
-
   } catch (error) {
     console.log(error);
     res.status(500).send({
       success: false,
       message: "Error in deleting user",
+      error: error,
+    });
+  }
+};
+
+//Get all listing that the user is created->
+export const getUserListingsController = async (req, res, next) => {
+  if (req.user._id === req.params.id) {
+    try {
+      const listings = await Listing.find({ userRef: req.params.id });
+
+      res.status(200).json(listings);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({
+        success: false,
+        message: "Error in get user listing controller",
+        error: error,
+      });
+    }
+  } else {
+    console.log(error);
+    return res.status(401).send({
+      success: false,
+      message: "You can only view your own listings!",
       error: error,
     });
   }
