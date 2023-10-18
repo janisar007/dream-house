@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { app } from "../firebase";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   getDownloadURL,
   getStorage,
@@ -9,7 +9,26 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 
-const CreateListing = () => {
+const UpdateListing = () => {
+
+    const params = useParams();
+
+    useEffect(() => {
+        const fetchListing = async () => {
+            const listingId = params.listingId;
+            const res = await fetch(`/api/listing/get/${listingId}`);
+            const data = await res.json();
+
+            if(data.success === false) {
+                console.log(data.message);
+                return;
+            }
+            setFormData(data);
+        }
+
+        fetchListing();
+    }, [])
+
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
   const [files, setFiles] = useState([]);
@@ -146,7 +165,7 @@ const CreateListing = () => {
 
       setFormSubmitLoading(true);
       setFormSubmitError(false);
-      const res = await fetch("/api/listing/create", {
+      const res = await fetch(`/api/listing/update/${params.listingId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -176,7 +195,7 @@ const CreateListing = () => {
   return (
     <main className="p-3 max-w-4xl mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">
-        Create a Listing
+        Update a Listing
       </h1>
 
       {/* I am giving both divs flex-1 so that they both have the same space on screen. */}
@@ -400,7 +419,7 @@ const CreateListing = () => {
             disabled={formSubmitLoading || imageUploadLoading}
             className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
           >
-            {formSubmitLoading ? "Creating..." : "Create Listing"}
+            {formSubmitLoading ? "Updating..." : "Update Listing"}
           </button>
           {formSubmitError && (
             <p className="text-red-700 text-sm">{formSubmitError}</p>
@@ -411,4 +430,6 @@ const CreateListing = () => {
   );
 };
 
-export default CreateListing;
+export default UpdateListing;
+
+

@@ -69,12 +69,33 @@ export const updateListingController = async (req, res, next) => {
     );
 
     res.status(200).json(updatedListing);
-    
   } catch (error) {
     console.log(error);
     res.status(500).send({
       success: false,
       message: "Error in update listing",
+      error: error,
+    });
+  }
+};
+
+export const getListingController = async (req, res, next) => {
+  try {
+    const listing = await Listing.findById(req.params.id);
+
+    if (!listing) {
+      return res.status(404).send({
+        success: false,
+        message: "Listing not found!",
+      });
+    }
+
+    res.status(200).json(listing);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error in getting listing",
       error: error,
     });
   }

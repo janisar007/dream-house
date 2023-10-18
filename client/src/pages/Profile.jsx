@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MdDelete } from "react-icons/md";
 import { AiTwotoneEdit } from "react-icons/ai";
 import {
@@ -23,6 +23,7 @@ import {
 } from "../redux/user/userSlice";
 
 const Profile = () => {
+  const navigate = useNavigate();
   const fileRef = useRef(null); //?In the first input field i defined ref={fileRef} and in img i created an onClick in which fileRef.current.click() is written. in this way i am connecting that input field to this img. so if i click on img, it is actually clicking on that input that opens file storage of our computer. we cannot see that input coz it is hidden
   //!FIREBASE_RULES: After connecting input and img i have to write some rules for read and write in my application in the firebase. coz default i can not write in my application. this is done at vid(3:48:00)->
   const [file, setFile] = useState(undefined);
@@ -325,9 +326,12 @@ const Profile = () => {
                 <button onClick={() => handleListingDelete(listing._id)} className="text-red-700 uppercase">
                   <MdDelete className="text-2xl w-6 h-6"/>
                 </button>
+
+                <Link to={`/update-listing/${listing._id}`}>
                 <button className="text-green-700 uppercase">
                   <AiTwotoneEdit className="text-2xl w-6 h-6"/>
                 </button>
+                </Link>
               </div>
             </div>
           ))}
