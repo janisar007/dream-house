@@ -241,7 +241,7 @@ const UpdateListing = () => {
                 id="sale"
                 className="w-5"
                 onChange={handleChange}
-                checked={formData.type === "sale"}
+                checked={formData.type === "sale"} 
               />
               <span>Sell</span>
             </div>
