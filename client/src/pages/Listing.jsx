@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 //swiper i a npm package. with this we can create swap effect on multiple photos ->
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -15,17 +16,21 @@ import {
   FaParking,
   FaShare,
 } from "react-icons/fa";
+import Contact from "../components/Contact";
 
 const Listing = () => {
   //initializing swapper->
   SwiperCore.use([Navigation]);
   const [listing, setListing] = useState(null);
-//   console.log(listing)
+  //   console.log(listing)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [contact, setContact] = useState(false);
 
   const params = useParams();
+  const { currentUser } = useSelector((state) => state.user);
+//   console.log(currentUser._id);
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -121,28 +126,36 @@ const Listing = () => {
             </p>
 
             <ul className="text-green-900 font-semibold text-sm flex flex-wrap items-center gap-4 sm:gap-6">
-                <li className="flex items-center gap-1 whitespace-nowrap ">
-                    <FaBed className="text-lg"/>
-                    {listing.bedrooms > 1 ? `${listing.bedrooms} beds` : `${listing.bedrooms} bed`}
-                </li>
+              <li className="flex items-center gap-1 whitespace-nowrap ">
+                <FaBed className="text-lg" />
+                {listing.bedrooms > 1
+                  ? `${listing.bedrooms} beds`
+                  : `${listing.bedrooms} bed`}
+              </li>
 
-                <li className="flex items-center gap-1 whitespace-nowrap ">
-                    <FaBath className="text-lg"/>
-                    {listing.bathrooms > 1 ? `${listing.bathrooms} baths` : `${listing.bathrooms} bath`}
-                </li>
+              <li className="flex items-center gap-1 whitespace-nowrap ">
+                <FaBath className="text-lg" />
+                {listing.bathrooms > 1
+                  ? `${listing.bathrooms} baths`
+                  : `${listing.bathrooms} bath`}
+              </li>
 
-                <li className="flex items-center gap-1 whitespace-nowrap ">
-                    <FaParking className="text-lg"/>
-                    {listing.parking ? 'Parking Spot' : 'No Parking'}
-                </li>
+              <li className="flex items-center gap-1 whitespace-nowrap ">
+                <FaParking className="text-lg" />
+                {listing.parking ? "Parking Spot" : "No Parking"}
+              </li>
 
-                <li className="flex items-center gap-1 whitespace-nowrap ">
-                    <FaChair className="text-lg"/>
-                    {listing.furnished ? 'Furnished' : 'Unfurnished'}
-                </li>
-            </ul>
-
-
+              <li className="flex items-center gap-1 whitespace-nowrap ">
+                <FaChair className="text-lg" />
+                {listing.furnished ? "Furnished" : "Unfurnished"}
+              </li>
+            </ul> 
+            {currentUser && listing.userRef !== currentUser._id && !contact && (
+              <button onClick={() => setContact(true)} className="bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3">
+                Contact landlord
+              </button>
+            )}
+            {contact && <Contact listing={listing}/>}
           </div>
         </div>
       )}

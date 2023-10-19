@@ -92,10 +92,34 @@ export const getUserListingsController = async (req, res, next) => {
       });
     }
   } else {
-    console.log(error);
+    // console.log(error);
     return res.status(401).send({
       success: false,
       message: "You can only view your own listings!",
+      error: error,
+    });
+  }
+};
+
+export const getUserController = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).send({
+        success: false,
+        message: "User not found!",
+      });
+    }
+
+    const { password: pass, ...rest } = user._doc;
+
+    res.status(200).json(rest);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      success: false,
+      message: "Error in getting user info for contact!",
       error: error,
     });
   }
