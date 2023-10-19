@@ -1,10 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    //First we want the parameters or the chrome urls about my website ->
+    const urlParams = new URLSearchParams(window.location.search);
+
+    //Now we want to add or update the search term ->
+    urlParams.set("searchTerm", searchTerm);
+
+    //now we have to navigate user to this new url but first we have to convert urlParams into string coz in urlParams some of them are string some of them number etc ->
+    const searchQuery = urlParams.toString();
+    navigate(`/search?${searchQuery}`);
+  };
+  //!SO when ever we change searchTerm and enter from website the change in parameter of searchTerm changes in chrom search bar. but we want when we chnage the value of searchTerm from chrome search bar it also changes from the search bar of our website as well. first part is done by the handleSubmit function. the second part we will achieve with following useEffect hook ->
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    //searchTermFromUrl = searchTermFromChrome
+    const searchTermFromUrl = urlParams.get("searchTerm");
+
+    if (searchTermFromUrl) {
+      setSearchTerm(searchTermFromUrl);
+    }
+  }, [location.search]);
+
   return (
     <div className="bg-slate-200 shadow-md">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
@@ -15,15 +42,21 @@ const Header = () => {
           </h1>
         </Link>
 
-        <form className="bg-slate-100 p-3 rounded-lg flex items-center">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-slate-100 p-3 rounded-lg flex items-center"
+        >
           <input
             type="text"
             placeholder="Search..."
             // here w-24 sm:w-64 means for small screens width=24 and for big and above screens width=64
             className="bg-transparent focus:outline-none w-32 sm:w-64"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
-
-          <FaSearch className="text-slate-600" />
+          <button>
+            <FaSearch className="text-slate-600" />
+          </button>
         </form>
 
         <ul className="flex gap-4">
