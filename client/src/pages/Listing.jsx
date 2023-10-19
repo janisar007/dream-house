@@ -30,7 +30,7 @@ const Listing = () => {
 
   const params = useParams();
   const { currentUser } = useSelector((state) => state.user);
-//   console.log(currentUser._id);
+  //   console.log(currentUser._id);
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -149,13 +149,16 @@ const Listing = () => {
                 <FaChair className="text-lg" />
                 {listing.furnished ? "Furnished" : "Unfurnished"}
               </li>
-            </ul> 
+            </ul>
             {currentUser && listing.userRef !== currentUser._id && !contact && (
-              <button onClick={() => setContact(true)} className="bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3">
+              <button
+                onClick={() => setContact(true)}
+                className="bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3"
+              >
                 Contact landlord
               </button>
             )}
-            {contact && <Contact listing={listing}/>}
+            {contact && <Contact listing={listing} />}
           </div>
         </div>
       )}
