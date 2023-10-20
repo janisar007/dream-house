@@ -28,9 +28,8 @@ const SignIn = () => {
   };
 
   const handleSubmit = async (e) => {
+    e.preventDefault(); //it prevent refreshing when ever we  submit the form.
     try {
-      e.preventDefault(); //it prevent refreshing when ever we  submit the form.
-
       // setLoading(true);
       dispatch(signInStart());
 
@@ -45,7 +44,7 @@ const SignIn = () => {
 
       // console.log(res);
       const data = await res.json();
-      console.log(data);
+      // console.log(data);
 
       if (data.success == false) {
         // setLoading(false);
@@ -62,7 +61,7 @@ const SignIn = () => {
       navigate("/");
     } catch (error) {
       dispatch(signInFailure(error.message));
-      console.log("Error in form submitting", error);
+      // console.log("Error in form submitting", error);
     }
   };
 
@@ -96,7 +95,7 @@ const SignIn = () => {
           {loading ? "Loading..." : "Sign In"}
         </button>
 
-        <OAuth/>
+        <OAuth />
       </form>
 
       <div className="flex gap-2 mt-5">
