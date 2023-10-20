@@ -10,7 +10,7 @@ import CreateListing from "./pages/CreateListing";
 import UpdateListing from "./pages/UpdateListing";
 import Listing from "./pages/Listing";
 import Search from "./pages/Search";
-import SignIn from "./pages/SignIn";
+// import SignIn from "./pages/SignIn";
 
 const App = () => {
   return (
@@ -22,7 +22,7 @@ const App = () => {
 
           <Route path="/sign-up" element={<SignUp />} />
 
-          <Route path="/sign-in" element={<SignIn />} />
+          {/* <Route path="/sign-in" element={<SignIn />} /> */}
 
 
           <Route path="/about" element={<About />} />
