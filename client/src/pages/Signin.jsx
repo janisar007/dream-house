@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -9,7 +9,7 @@ import {
 } from "../redux/user/userSlice";
 import OAuth from "../components/OAuth";
 
-const SignIn = () => {
+export default function SignIn() {
   const [formData, setFormData] = useState({});
   // const [error, setError] = useState(null);
   // const [loading, setLoading] = useState(false);
@@ -110,5 +110,3 @@ const SignIn = () => {
     </div>
   );
 };
-
-export default SignIn;
