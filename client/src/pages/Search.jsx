@@ -16,6 +16,7 @@ const Search = () => {
 
   const [loading, setLoading] = useState(false);
   const [listings, setListings] = useState([]);
+  const [showMore, setShowMore] = useState(false);
   //   console.log(listings);
 
   //   console.log(sidebarData);
@@ -104,10 +105,17 @@ const Search = () => {
     const fetchListings = async () => {
       try {
         setLoading(true);
+        setShowMore(false);
 
         const searchQueryUrl = urlParams.toString();
         const res = await fetch(`/api/listing/get?${searchQueryUrl}`);
         const data = await res.json();
+
+        if (data.length > 8) {
+          setShowMore(true);
+        } else {
+          setShowMore(false);
+        }
 
         setListings(data);
         setLoading(false);
@@ -118,6 +126,32 @@ const Search = () => {
 
     fetchListings();
   }, [location.search]);
+
+  const onClickShowMore = async () => {
+    try {
+      //Now here i want the listing after the number of listing that are showing right now.
+      const numberOfListings = listings.length;
+      const startIndex = numberOfListings;
+
+      const urlParams = new URLSearchParams(location.search);
+
+      urlParams.set("startIndex", startIndex);
+
+      const searchQuery = urlParams.toString();
+
+      const res = await fetch(`/api/listing/get?${searchQuery}`);
+
+      const data = await res.json();
+
+      if (data.length < 9) {
+        setShowMore(false); //we do not show the button anymore.
+      }
+
+      setListings([...listings, ...data]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="flex flex-col md:flex-row">
@@ -251,6 +285,14 @@ const Search = () => {
             listings.map((listing) => (
               <ListingItem key={listing._id} listing={listing} />
             ))}
+          {showMore && (
+            <button
+              className="text-green-700 hover:underline p-7 text-center w-full"
+              onClick={onClickShowMore}
+            >
+              Show more
+            </button>
+          )}
         </div>
       </div>
     </div>
