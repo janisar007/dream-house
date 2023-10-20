@@ -7,9 +7,9 @@ import {
   signInStart,
   signInSuccess,
 } from "../redux/user/userSlice.js";
-import OAuth from "../components/OAuth";
+import OAuth from "../components/OAuth.jsx";
 
-export default function SignIn() {
+export default function Signin() {
   const [formData, setFormData] = useState({});
   const { loading, error } = useSelector((state) => state.user);
 
