@@ -6,11 +6,15 @@ import userRouter from "./routes/user.route.js";
 import listingRouter from "./routes/listing.route.js";
 import cookieParser from "cookie-parser"; //initilaize it in the middleware section
 
+import path from "path";
+
 //configure env
 dotenv.config();
 
 //database config->
 connectDB();
+
+const __dirname = path.resolve();
 
 //rest object
 const app = express();
@@ -24,6 +28,12 @@ app.use(cookieParser()); //to access cookie data in the project.
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/listing", listingRouter);
+
+app.use(express.static(path.join(__dirname, "/client/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+});
 
 const PORT = process.env.PORT || 3000;
 
